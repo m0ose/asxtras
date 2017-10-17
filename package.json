@@ -1,0 +1,19 @@
+{
+  "name": "asxtras",
+  "version": "1.0.0",
+  "description": "extra stuff for asx",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m0ose/asxtras.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/m0ose/asxtras/issues"
+  },
+  "homepage": "https://github.com/m0ose/asxtras#readme"
+}
