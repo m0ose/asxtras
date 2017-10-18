@@ -9,7 +9,7 @@ util.toWindow({ ColorMap, Model, util })
 class FlockModel extends Model {
   constructor (...args) {
     super(...args)
-    this.fbinterface = new FirebaseInterface(this, 'test1')
+    this.fbinterface = new FirebaseInterface(this, {uri:'test1'})
 
 */
 
@@ -17,15 +17,15 @@ import Evented from './Evented.js'
 
 export default class FirebaseInterface {
 
-  constructor (model, uri='thefirsttest') {
-    const FBConfig = {
-      databaseURL: 'https://acequia.firebaseio.com'
+  constructor (model, options={uri:'thefirsttest'}) {
+    var FBConfig = {
+      databaseURL: options.databaseURL || 'https://acequia.firebaseio.com'
     }
     firebase.initializeApp(FBConfig)
     const db = new firebase.database()
     this.minTimeBetweenUpdates = 100
     this._lastUpdate = 0
-    this.rootRef = db.ref().child('testofasx').child(uri)
+    this.rootRef = db.ref().child('testofasx').child(options.uri)
     this.turtleRef = this.rootRef.child('turtles')
     this.model = model
     this.events = []
@@ -38,7 +38,7 @@ export default class FirebaseInterface {
     this.model.anim.evented.onEvent('stop', (arg, ev) => this.updateFB(arg, ev))
     this.model.anim.evented.onEvent('step', (arg, ev) => this.updateFB(arg, ev))
     // Below the step function gets overridden. This is no the best way to do it.
-    //    ASX intends to implement a way to get step events. 
+    //    ASX intends to implement a way to get step events.
     this.model.anim.___step = this.model.anim.step
     this.model.anim.step = function() { this.___step(); this.evented.fire('step') }
   }
