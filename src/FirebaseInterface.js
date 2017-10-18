@@ -12,7 +12,11 @@ class FlockModel extends Model {
     this.fbinterface = new FirebaseInterface(this, 'test1')
 
 */
+
+import Evented from './Evented.js'
+
 export default class FirebaseInterface {
+
   constructor (model, uri='thefirsttest') {
     const FBConfig = {
       databaseURL: 'https://acequia.firebaseio.com'
@@ -24,10 +28,19 @@ export default class FirebaseInterface {
     this.rootRef = db.ref().child('testofasx').child(uri)
     this.turtleRef = this.rootRef.child('turtles')
     this.model = model
-    this.model.anim.onEvent('start', (arg, ev) => this.updateFB(arg, ev))
-    this.model.anim.onEvent('stop', (arg, ev) => this.updateFB(arg, ev))
-    this.model.anim.onEvent('step', (arg, ev) => this.updateFB(arg, ev))
+    this.events = []
+    this.subscribeToEvents()
   }
+
+  subscribeToEvents () {
+    this.model.anim.evented = new Evented()
+    this.model.anim.evented.onEvent('start', (arg, ev) => this.updateFB(arg, ev))
+    this.model.anim.evented.onEvent('stop', (arg, ev) => this.updateFB(arg, ev))
+    this.model.anim.evented.onEvent('step', (arg, ev) => this.updateFB(arg, ev))
+    this.model.anim.___step = this.model.anim.step
+    this.model.anim.step = function() { this.___step(); this.evented.fire('step') }
+  }
+
   updateFB (fu, evname) {
     const now = new Date().getTime()
     if (now - this._lastUpdate > this.minTimeBetweenUpdates || evname !== 'step') {
@@ -36,6 +49,7 @@ export default class FirebaseInterface {
       this.turtleRef.set(this.turtlesToGeoJson())
     }
   }
+
   turtlesToGeoJson () {
     var result = {
       'type': 'FeatureCollection',
