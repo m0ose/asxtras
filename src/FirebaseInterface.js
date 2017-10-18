@@ -79,7 +79,7 @@ export default class FirebaseInterface {
       let size = 'small'
       if (crush.size > 1) size = 'medium'
       if (crush.size > 2) size = 'large'
-      let color = crush.color.string || '#00ff00'
+      let color = crush.color.getCss() || '#00ff00'
       // console.log('crush', crush)
       result.features.push({
         'type': 'Feature',
