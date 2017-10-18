@@ -45,7 +45,10 @@ class Animator {
   reset () { this.stop(); this.ticks = this.draws = 0 }
   // Two handlers used by animation loop
   step () { this.ticks++; this.model.step() }
-  draw () { this.draws++; this.model.draw() }
+  draw () {
+    this.draws++;
+    if(this.model.draw) this.model.draw() 
+  }
   // step and draw the model once
   once () { this.step(); this.draw() }
   // Get current time, with high resolution timer if available
