@@ -37,6 +37,8 @@ export default class FirebaseInterface {
     this.model.anim.evented.onEvent('start', (arg, ev) => this.updateFB(arg, ev))
     this.model.anim.evented.onEvent('stop', (arg, ev) => this.updateFB(arg, ev))
     this.model.anim.evented.onEvent('step', (arg, ev) => this.updateFB(arg, ev))
+    // Below the step function gets overridden. This is no the best way to do it.
+    //    ASX intends to implement a way to get step events. 
     this.model.anim.___step = this.model.anim.step
     this.model.anim.step = function() { this.___step(); this.evented.fire('step') }
   }
