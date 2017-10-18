@@ -9,7 +9,7 @@ util.toWindow({ ColorMap, Model, util })
 class FlockModel extends Model {
   constructor (...args) {
     super(...args)
-    this.fbinterface = new FirebaseInterface(this, {uri:'test1'})
+    this.fbinterface = new FirebaseInterface(this, {scenarioID:'st_somewhere'})
 
 */
 
@@ -17,7 +17,7 @@ import Evented from './Evented.js'
 
 export default class FirebaseInterface {
 
-  constructor (model, options={uri:'thefirsttest'}) {
+  constructor (model, options={scenarioID:'thefirsttest'}) {
     var FBConfig = {
       databaseURL: options.databaseURL || 'https://acequia.firebaseio.com'
     }
@@ -25,11 +25,14 @@ export default class FirebaseInterface {
     const db = new firebase.database()
     this.minTimeBetweenUpdates = 100
     this._lastUpdate = 0
-    this.rootRef = db.ref().child('testofasx').child(options.uri)
-    this.turtleRef = this.rootRef.child('turtles')
+    this.rootRef = db.ref().child('testofasx').child(options.scenarioID)
     this.model = model
     this.events = []
-    this.subscribeToEvents()
+    this.turtleRef = this.rootRef.child('turtles')
+    if(options.scenarioID && options.scenarioID.length > 3 && options.scenarioID.length < 90) {
+      this.subscribeToEvents()
+      this.watchScenario(options.scenarioID)
+    }
   }
 
   subscribeToEvents () {
@@ -52,6 +55,21 @@ export default class FirebaseInterface {
     }
   }
 
+  watchScenario(scenarioID) {
+    var db = new firebase.database()
+    var ref = db.ref().child('scenarios').child(scenarioID)
+    ref.child('models/annotation/airattack').set(this.turtleRef.toString())
+    ref.child('models/animating/').on('value', (ev)=>{
+      var val = ev.val()
+      if(val == false) this.model.anim.stop()
+      if(val == true) this.model.anim.start()
+    })
+    ref.child('models/simspeed/').on('value', (ev)=>{
+      var val = Number(ev.val())
+      if(val > 1) this.model.speedMultiplier = val
+    })
+  }
+
   turtlesToGeoJson () {
     var result = {
       'type': 'FeatureCollection',
@@ -72,7 +90,7 @@ export default class FirebaseInterface {
         'properties': {
           'marker-size': size,
           'marker-color': color,
-          'marker-symbol': 'bus' // should have standard agent script icons
+          'marker-symbol': 'airfield' // should have standard agent script icons
         }
       })
     })
