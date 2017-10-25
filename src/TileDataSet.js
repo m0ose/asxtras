@@ -2,6 +2,21 @@ import util from './util.js'
 import RGBDataSet from '../../../node_modules/coreas/src/RGBDataSet.js'
 import DataSet from '../../../node_modules/coreas/src/DataSet.js'
 
+DataSet.paste = function(dataset, x = 0, y = 0) {
+  const lrX = Math.min(x + dataset.width, this.width)
+  const lrY = Math.min(y + dataset.height, this.height)
+  for (let i = y; i < lrY; i++) {
+    const y2 = i - y
+    for (let j = x; j < lrX; j++) {
+      const x2 = j - x
+      const dat = dataset.getXY(x2, y2)
+      this.setXY(j, i, dat)
+    }
+  }
+}
+
+
+
 //
 // Load tiled data into a dataset
 //
