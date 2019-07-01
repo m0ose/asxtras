@@ -1,6 +1,6 @@
-import util from './util.js'
-import RGBDataSet from '../../../node_modules/coreas/src/RGBDataSet.js'
-import DataSet from '../../../node_modules/coreas/src/DataSet.js'
+import util from '../../../node_modules/agentscript/src/util.js'
+import RGBDataSet from '../../../node_modules/agentscript/src/RGBDataSet.js'
+import DataSet from '../../../node_modules/agentscript/src/DataSet.js'
 
 DataSet.paste = function(dataset, x = 0, y = 0) {
   const lrX = Math.min(x + dataset.width, this.width)
