@@ -1,4 +1,4 @@
-import util from "../../../node_modules/@redfish/agentscript/src/util/async.js";
+import util from "../../../node_modules/@redfish/agentscript/src/utils/async.js";
 import RGBDataSet from "../../../node_modules/@redfish/agentscript/src/RGBDataSet.js";
 import DataSet from "../../../node_modules/@redfish/agentscript/src/DataSet.js";
 
