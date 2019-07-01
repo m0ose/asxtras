@@ -1,4 +1,4 @@
-import util from "../../../node_modules/@redfish/agentscript/src/utils/async.js";
+import { imagePromise } from "../../../node_modules/@redfish/agentscript/src/utils/async.js";
 import RGBDataSet from "../../../node_modules/@redfish/agentscript/src/RGBDataSet.js";
 import DataSet from "../../../node_modules/@redfish/agentscript/src/DataSet.js";
 
@@ -150,7 +150,7 @@ class TileDataSet extends DataSet {
     if (this.debug) console.time("downloadTiles");
     const promises = [];
     for (const i of this.tileLocations.tiles) {
-      const pr = util.imagePromise(i.url); // this.LFwrapPromiseFactory(i.url, i)
+      const pr = imagePromise(i.url); // this.LFwrapPromiseFactory(i.url, i)
       promises.push(pr);
     }
     Promise.all(promises)
